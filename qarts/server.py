@@ -18,6 +18,15 @@ def root(request) -> t.Tuple[dict, int]:
     return {"message": "Qarts HTTP server is running."}, 200
 
 
+@app.post("/shutdown")
+def shutdown(request) -> t.Tuple[dict, int]:
+    try:
+        request.app.shutdown()
+    except AttributeError:
+        pass  # server is not running (e.g. from TestClient)
+    return {"status": "shutting down"}, 200
+
+
 @app.post("/query")
 def query(request) -> t.Tuple[dict, int]:
     payload: dict = request.json

@@ -51,3 +51,9 @@
 - Implemented `-D`/`--daemon` CLI flag in `qarts/cli.py`.
 - Added Unix-only double-fork daemonization (`_daemonize`) with stdio redirection to `/dev/null`.
 - Added `tests/test_cli.py` with 5 passing tests covering argument parsing, fork behavior, stdio redirection, and platform guard.
+
+## 2026-08-03
+
+- Implemented `POST /shutdown` endpoint in `qarts/server.py` that calls `request.app.shutdown()`.
+- Endpoint gracefully handles `AttributeError` when the server is not running (e.g. from TestClient).
+- Added `test_shutdown` to `tests/test_server.py`.

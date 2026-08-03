@@ -50,3 +50,9 @@ def test_query_invalid_sql():
     assert resp.status_code == 400
     assert resp.json is not None
     assert "error" in resp.json
+
+
+def test_shutdown():
+    resp = asyncio.run(client.post("/shutdown"))
+    assert resp.status_code == 200
+    assert resp.json == {"status": "shutting down"}
