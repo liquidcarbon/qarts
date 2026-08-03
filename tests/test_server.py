@@ -1,3 +1,7 @@
+__doc__ = """tests/test_server.py
+Tests for the qarts server.
+"""
+
 import asyncio
 import json
 
@@ -6,6 +10,13 @@ from microdot.test_client import TestClient
 from qarts.server import app
 
 client = TestClient(app)
+
+
+def test_root_endpoint():
+    resp = asyncio.run(client.post("/"))
+    assert resp.status_code == 200
+    assert resp.json is not None
+    assert resp.json["message"] == "Qarts HTTP server is running."
 
 
 def test_query_valid_sql():

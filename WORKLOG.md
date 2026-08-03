@@ -45,3 +45,9 @@
         -H "Content-Type: application/json" \
         -d '{"q": "SELECT COUNT(*) AS count FROM read_csv_auto('\''tests/test_data/isotopes.csv'\'')"}'
     ```
+
+## 2026-08-03
+
+- Implemented `-D`/`--daemon` CLI flag in `qarts/cli.py`.
+- Added Unix-only double-fork daemonization (`_daemonize`) with stdio redirection to `/dev/null`.
+- Added `tests/test_cli.py` with 5 passing tests covering argument parsing, fork behavior, stdio redirection, and platform guard.

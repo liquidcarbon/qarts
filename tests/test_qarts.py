@@ -1,3 +1,7 @@
+__doc__ = """tests/test_qarts.py
+Tests for the qarts models.
+"""
+
 import duckdb
 import pytest
 

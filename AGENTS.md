@@ -26,7 +26,7 @@ Folders for python and pytest executables:
 
 Before editing any files:
 
-1. Scan for TODOs and unresolved design notes relevant to the feature under consideration. Start with module docstrings, then class/function docstrings, followed by inline comments.
+1. Scan for TODOs and unresolved design notes relevant to the feature under consideration. Start with tail of `WORKLOG.md`, then check module docstrings, then class/function docstrings, followed by inline comments.
 2. Report relevant TODOs with their location and a brief description. Do not modify or resolve them yet.
 3. Identify the next feature and explain why it is the logical next step.  Consult `DECISIONS.md` when historical context is relevant.
 4. Identify files that will be created or modified.
@@ -39,8 +39,7 @@ Before editing any files:
 2. Report new tests and existing tests that could have been affected.
 3. Report assumptions and intentional deviations.
 4. Remove completed TODOs from the code.
-5. Record durable decisions in `DECISIONS.md` and noteworthy work in
-   `WORKLOG.md`.
+5. Record (append at the end) durable decisions in `DECISIONS.md` and noteworthy work in `WORKLOG.md`.
 6. Stop and wait for approval.
 
 

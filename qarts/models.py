@@ -1,3 +1,7 @@
+__doc__ = """qarts/models.py
+Data models for the qarts server.
+"""
+
 import typing as t
 from dataclasses import dataclass
 

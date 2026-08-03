@@ -1,3 +1,7 @@
+__doc__ = """qarts/server.py
+Qarts HTTP server using Microdot.  Bring your own for production use.
+"""
+
 import typing as t
 from dataclasses import asdict
 
@@ -7,6 +11,11 @@ from .models import QueryRequest, QueryResponse
 from .query import Q
 
 app = Microdot()
+
+
+@app.post("/")
+def root(request) -> t.Tuple[dict, int]:
+    return {"message": "Qarts HTTP server is running."}, 200
 
 
 @app.post("/query")
