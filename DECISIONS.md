@@ -42,3 +42,15 @@ We are building an HTTP interface for SQL and LLM queries on filesystems.
 
 **Decision:** Support `-D`/`--daemon` via a Unix-only double-fork in the CLI, and do not write PID files.
 **Rationale:** Daemonization is a common server need and is easy to implement with `os.fork()` on POSIX systems. PID files add file-system bookkeeping that we decided to skip; users who need PID files already have tools like `pidfile` or can layer that on externally.
+
+
+## Query Lifecycle
+
+**Decision:** `Q.run()` materializes all rows and closes its DuckDB connection before returning. `max_rows` limits rows, and a `truncated` flag reports whether more rows exist.
+**Rationale:** DuckDB relations are lazy and become unusable once the connection closes, so the earlier design leaked a connection per query. Materializing rows and closing in `run()` keeps server state clean for repeated queries ("rinse and repeat") and gives a single reporting channel for truncation via the `truncated` flag.
+
+
+## Server Binding
+
+**Decision:** CLI exposes only `--host` (default `0.0.0.0`) and `--port` (default `7890`). No short forms, no env vars.
+**Rationale:** An agentic client needs to know exactly where the server listens; explicit long flags keep the CLI surface minimal and unambiguous. The default port 7890 avoids the common 5000 collision found in many projects. Env-config is unnecessary for a lightweight server started by the user or orchestrator.

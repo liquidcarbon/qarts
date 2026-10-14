@@ -12,6 +12,8 @@ from .query import Q
 
 app = Microdot()
 
+DEFAULT_MAX_ROWS = 1000
+
 
 @app.post("/")
 def root(request) -> t.Tuple[dict, int]:
@@ -30,15 +32,23 @@ def shutdown(request) -> t.Tuple[dict, int]:
 @app.post("/query")
 def query(request) -> t.Tuple[dict, int]:
     payload: dict = request.json
-    req = QueryRequest(q=Q(payload.get("q", "")))
+    if not isinstance(payload, dict):
+        return {"error": "request body must be a JSON object"}, 400
+
+    q = Q(str(payload.get("q", "")))
+    max_rows = payload.get("max_rows", DEFAULT_MAX_ROWS)
+    if max_rows is not None and not isinstance(max_rows, int):
+        return {"error": "max_rows must be an int or null"}, 400
+
+    req = QueryRequest(q=q, max_rows=max_rows)
 
     try:
-        relation = req.q.run()
-        rows = relation.fetchall()
+        columns, rows, truncated = req.q.run(req.max_rows)
         resp = QueryResponse(
-            columns=relation.columns,
+            columns=columns,
             rows=rows,
             row_count=len(rows),
+            truncated=truncated,
         )
         return asdict(resp), 200
     except Exception as e:

@@ -13,7 +13,7 @@ class QueryRequest:
     """A request to execute a SQL query."""
 
     q: Q
-    query_type: t.Literal["sql", "other"] = "sql"
+    max_rows: int | None = 1000
 
 
 @dataclass
@@ -23,4 +23,5 @@ class QueryResponse:
     columns: list[str]
     rows: list[tuple[t.Any, ...]]
     row_count: int
+    truncated: bool = False
     error: str | None = None

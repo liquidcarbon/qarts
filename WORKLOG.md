@@ -57,3 +57,13 @@
 - Implemented `POST /shutdown` endpoint in `qarts/server.py` that calls `request.app.shutdown()`.
 - Endpoint gracefully handles `AttributeError` when the server is not running (e.g. from TestClient).
 - Added `test_shutdown` to `tests/test_server.py`.
+
+## 2026-10-14
+
+- Compact results: reworked `Q.run(max_rows)` to close its DuckDB connection and return `(columns, rows, truncated)` instead of a lazy relation.
+- Added `max_rows` (default 1000) to `QueryRequest` and `truncated` flag to `QueryResponse`.
+- `POST /query` now validates `max_rows` type and returns the new shape.
+- Added server and model tests for truncation, no-truncation, and bad `max_rows`.
+- CLI: added `--host` (default `0.0.0.0`) and `--port` (default `7890`) flags, passed through to `app.run()`.
+- Added CLI tests for defaults and custom host/port.
+- Verified end-to-end: 19 tests pass; smoke-tested server on `127.0.0.1:7999` with curl (query with `max_rows: 2` returns `truncated: true`; `/shutdown` works).

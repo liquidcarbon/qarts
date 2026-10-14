@@ -20,11 +20,30 @@ def test_q_run_csv():
         "SELECT Symbol, Mass FROM read_csv_auto('tests/test_data/isotopes.csv') "
         "WHERE Symbol = 'H' ORDER BY Mass"
     )
-    result = q.run()
-    assert result.columns == ["Symbol", "Mass"]
-    rows = result.fetchall()
+    columns, rows, truncated = q.run()
+    assert columns == ["Symbol", "Mass"]
+    assert truncated is False
     assert len(rows) == 3
     assert [row[1] for row in rows] == [1.007825, 2.014102, 3.016049]
+
+
+def test_q_run_max_rows_truncated():
+    q = qarts.Q(
+        "SELECT Symbol FROM read_csv_auto('tests/test_data/isotopes.csv')"
+    )
+    columns, rows, truncated = q.run(max_rows=1)
+    assert truncated is True
+    assert len(rows) == 1
+    assert len(set(columns)) == 1
+
+
+def test_q_run_max_rows_no_truncation():
+    q = qarts.Q(
+        "SELECT Symbol FROM read_csv_auto('tests/test_data/isotopes.csv')"
+    )
+    columns, rows, truncated = q.run(max_rows=1000)
+    assert truncated is False
+    assert len(rows) == 354
 
 
 def test_q_bad_sql():

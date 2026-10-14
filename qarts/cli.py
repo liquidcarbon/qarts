@@ -52,6 +52,17 @@ def main(argv: list[str] | None = None) -> None:
         action="store_true",
         help="Run as a background daemon (Unix only)",
     )
+    parser.add_argument(
+        "--host",
+        default="0.0.0.0",
+        help="Host/IP to bind (default: 0.0.0.0)",
+    )
+    parser.add_argument(
+        "--port",
+        type=int,
+        default=7890,
+        help="Port to bind (default: 7890)",
+    )
     args = parser.parse_args(argv)
 
     if args.daemon:
@@ -59,4 +70,4 @@ def main(argv: list[str] | None = None) -> None:
             parser.error("--daemon is not supported on this platform")
         _daemonize()
 
-    app.run()
+    app.run(host=args.host, port=args.port)

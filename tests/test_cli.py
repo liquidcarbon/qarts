@@ -17,7 +17,19 @@ def test_cli_daemon_flag():
     ):
         cli.main(["--daemon"])
         mock_daemon.assert_called_once_with()
-        mock_run.assert_called_once()
+        mock_run.assert_called_once_with(host="0.0.0.0", port=7890)
+
+
+def test_cli_default_host_port():
+    with patch("qarts.cli.app.run") as mock_run:
+        cli.main([])
+        mock_run.assert_called_once_with(host="0.0.0.0", port=7890)
+
+
+def test_cli_custom_host_port():
+    with patch("qarts.cli.app.run") as mock_run:
+        cli.main(["--host", "127.0.0.1", "--port", "8080"])
+        mock_run.assert_called_once_with(host="127.0.0.1", port=8080)
 
 
 def test_daemonize_first_parent_exits():
